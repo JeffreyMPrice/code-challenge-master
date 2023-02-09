@@ -1,0 +1,1 @@
+class InternalServerError < StandardError; end

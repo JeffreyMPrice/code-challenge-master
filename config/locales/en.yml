@@ -1,0 +1,11 @@
+en:
+  errors:
+    not_implemented: 'your request is not implemented by this service'
+    unsupported_parameter: 'your request payload cannot be decoded; only valid JSON is supported'
+    unauthorized_client: 'client request is unauthorized, %{reason}'
+    internal: 'the service has encountered an internal error'
+    not_found: 'the resource you requested cannot be found'
+    date:
+      before_event_start: 'cannot be before the parent event is scheduled to begin'
+      after_event_end: 'cannot be after the parent event is scheduled to end'
+  root_message: 'all systems nominal - fly safe!'

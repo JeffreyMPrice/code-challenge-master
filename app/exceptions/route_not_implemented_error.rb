@@ -1,0 +1,1 @@
+class RouteNotImplementedError < StandardError; end
