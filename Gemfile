@@ -1,14 +1,14 @@
 source 'https://rubygems.org'
 git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
-ruby '2.6.6'
+ruby '2.7.7'
 
 # Rails
 gem 'rails', '5.2.4.3'
 
 # Drivers
-gem 'sqlite3', '~> 1.4'
 gem 'sequel'
+gem 'sqlite3', '~> 1.4'
 
 # App Server
 gem 'puma'
@@ -28,7 +28,7 @@ gem 'tzinfo-data', '>= 1.2016.7' # better timezone data
 
 # Only for Development
 group :development do
-  gem 'dotenv-rails'
   gem 'byebug'
+  gem 'dotenv-rails'
   gem 'faker'
 end
