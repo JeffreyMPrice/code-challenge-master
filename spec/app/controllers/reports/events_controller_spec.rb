@@ -48,5 +48,17 @@ RSpec.describe Reports::EventsController, type: :controller do
 
         expect(JSON.parse(response.body)).to eq expected
     end
+
+    it 'handles events with many conferences, removing duplicate speakers' do
+        expected = { "event" => {"description"=>"Test case for code challenge", "ends_at"=>"#{ends_at}", "speakers_total"=>2, "starts_at"=>"#{starts_at}", "title"=>"Test Event"},
+        "speakers" => [{"company"=>"Test Company", "email"=>"demo_speaker@email.com", "full_name"=>"Demo Speaker", "job_title"=>"CEO"},
+                       {"company"=>"Test Company", "email"=>"test_speaker@email.com", "full_name"=>"Test Speaker", "job_title"=>"CTO"}] }
+
+        event = create(:event_with_many_speakers)
+
+        get :speakers, params: { event_id: event.id }
+
+        expect(JSON.parse(response.body)).to eq expected
+    end
   end
 end
