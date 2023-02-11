@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 source 'https://rubygems.org'
 git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
@@ -27,8 +29,12 @@ gem 'email_validator' # makes it easier to validate email
 gem 'tzinfo-data', '>= 1.2016.7' # better timezone data
 
 # Only for Development
-group :development do
-  gem 'byebug'
+group :development, :test do
   gem 'dotenv-rails'
+  gem 'factory_bot_rails'
   gem 'faker'
+  gem 'pry-byebug'
+  gem 'rspec-rails'
+  gem 'rubocop'
+  gem 'timecop'
 end
