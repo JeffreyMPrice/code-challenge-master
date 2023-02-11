@@ -3,6 +3,7 @@
 FactoryBot.define do
   factory :conference do
     title { 'Test Data Load Conference' }
+    description { 'This is a FactorBoy Conference' }
     max_attendees { 500 }
     starts_at { Date.tomorrow }
     ends_at { Date.tomorrow + 1.day }
@@ -14,6 +15,10 @@ FactoryBot.define do
 
     factory :conference_with_duplicate_speaker do
       speakers { [build(:speaker_demo), build(:speaker_demo)] }
+    end
+
+    factory :conference_with_attendees do
+      attendees { build_list :attendee, 4 }
     end
   end
 end
