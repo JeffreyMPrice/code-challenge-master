@@ -2,6 +2,7 @@
 
 require 'rails_helper'
 
+# rubocop:disable Metrics/BlockLength
 RSpec.describe Reports::EventsController, type: :controller do
   render_views
 
@@ -65,4 +66,24 @@ RSpec.describe Reports::EventsController, type: :controller do
       expect(JSON.parse(response.body)).to eq expected
     end
   end
+
+  describe 'GET attendees' do
+    let(:ends_at) { (DateTime.tomorrow + 4.days).strftime('%FT%T.0000+0000') }
+    let(:starts_at) { DateTime.tomorrow.strftime('%FT%T.0000+0000') }
+
+    before(:all) do
+      # on the very slight chance we are working near midmidnight and the days turns over
+      # between creating the expected and the factory generation
+      Timecop.freeze
+    end
+
+    it 'shows all attendees for an event' do
+      event = create(:event)
+
+      get :attendees, params: { event_id: event.id }
+
+      expect(response).to have_http_status(:success)
+    end
+  end
 end
+# rubocop:enable Metrics/BlockLength
