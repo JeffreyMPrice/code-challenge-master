@@ -4,12 +4,13 @@ module Reports
   class ConferencesController < ::ApplicationController
     def attendees
       @conference = Conference.find(attendee_params[:conference_id])
+      @attendees = @conference.attendees.limit(attendee_params[:limit])
     end
 
     private
 
     def attendee_params
-      params.permit(:conference_id)
+      params.permit(:conference_id, :limit)
     end
   end
 end

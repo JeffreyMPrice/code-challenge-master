@@ -2,6 +2,7 @@
 
 require 'rails_helper'
 
+# rubocop:disable Metrics/BlockLength
 RSpec.describe Reports::ConferencesController, type: :controller do
   render_views
 
@@ -43,6 +44,28 @@ RSpec.describe Reports::ConferencesController, type: :controller do
                             'starts_at' => starts_at.to_s,
                             'title' => 'Test Data Load Conference' } }
       )
+    end
+
+    it 'returns only some of the records based on pagination' do
+        conf = create(:event_with_attendees).conferences.first
+        attendees = conf.attendees
+
+        get :attendees, params: { conference_id: conf.id, limit: 1 }
+
+        results = JSON.parse(response.body)
+        expect(response).to have_http_status(:success)
+        expect(results['attendees'].size).to eq(1)
+        expect(results['conference']['attendees_count']).to eq(4)
+        expect(results).to eq(
+          { 'attendees' => [{ 'email' => attendees.first.email,
+                              'full_name' => attendees.first.full_name,
+                              'requires_certification' => attendees.first.requires_certification}],
+            'conference' => { 'attendees_count' => attendees.count,
+                              'description' => conf.description,
+                              'ends_at' => ends_at.to_s,
+                              'starts_at' => starts_at.to_s,
+                              'title' => conf.title } }
+        )
     end
   end
 end
