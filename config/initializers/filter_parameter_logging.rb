@@ -1,1 +1,3 @@
-Rails.application.config.filter_parameters += [:password, :client_secret]
+# frozen_string_literal: true
+
+Rails.application.config.filter_parameters += %i[password client_secret]

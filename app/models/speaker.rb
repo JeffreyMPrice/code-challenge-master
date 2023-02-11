@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Speaker < ApplicationRecord
   belongs_to :conference
 

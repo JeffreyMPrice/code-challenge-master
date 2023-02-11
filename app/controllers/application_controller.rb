@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class ApplicationController < ActionController::API
   rescue_from('::Exception') { |exception| rescue_me!(exception) }
   before_action :force_json_format, :set_standard_response_headers

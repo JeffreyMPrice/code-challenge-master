@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 json.title event.title
 json.description event.description
 json.starts_at event.starts_at.to_datetime.to_timestamp
