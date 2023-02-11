@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 unless defined?(MAX_THREADS_COUNT)
   MAX_THREADS_COUNT = ENV.fetch('RAILS_MAX_THREADS', '20').to_i
   MIN_THREADS_COUNT = ENV.fetch('RAILS_MIN_THREADS', '5').to_i

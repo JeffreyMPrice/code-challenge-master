@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 Rails.application.routes.draw do
   namespace :reports do
     match 'conferences/:conference_id/attendees' => 'conferences#attendees', via: :get

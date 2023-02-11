@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class ExceptionPresenter
   attr_reader :exception, :status_code, :json_payload
 
@@ -24,15 +26,16 @@ class ExceptionPresenter
   end
 
   def create_json_payload
-    if exception.is_a?(ActionController::RoutingError) || exception.is_a?(NotImplementedError)
+    case exception
+    when ActionController::RoutingError, NotImplementedError
       @status_code = 421
       @json_payload[:error] = 'not_implemented'
       @json_payload[:error_description] = I18n.translate('errors.not_implemented')
-    elsif exception.is_a?(ActiveRecord::RecordNotFound)
+    when ActiveRecord::RecordNotFound
       @status_code = 404
       @json_payload[:error] = 'not_found'
       @json_payload[:error_description] = I18n.translate('errors.not_found')
-    elsif exception.is_a?(ActionDispatch::Http::Parameters::ParseError)
+    when ActionDispatch::Http::Parameters::ParseError
       @status_code = 400
       @json_payload[:error] = 'invalid_request'
       @json_payload[:error_description] = I18n.translate('errors.unsupported_parameter')

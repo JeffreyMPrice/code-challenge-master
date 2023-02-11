@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 Rails.application.configure do
   config.cache_classes = true
   config.eager_load = true
@@ -8,15 +10,15 @@ Rails.application.configure do
   config.active_storage.service = :local
   config.force_ssl = true
   config.log_level = :error
-  config.log_tags = [ :request_id ]
+  config.log_tags = [:request_id]
   config.action_mailer.perform_caching = false
   config.i18n.fallbacks = true
   config.active_support.deprecation = :log
   config.log_formatter = ::Logger::Formatter.new
   config.assets.compile = false
 
-  if ENV["RAILS_LOG_TO_STDOUT"].present?
-    logger           = ActiveSupport::Logger.new(STDOUT)
+  if ENV['RAILS_LOG_TO_STDOUT'].present?
+    logger           = ActiveSupport::Logger.new($stdout)
     logger.formatter = config.log_formatter
     config.logger    = ActiveSupport::TaggedLogging.new(logger)
   end

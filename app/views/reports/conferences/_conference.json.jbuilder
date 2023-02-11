@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 json.title conference.title
 json.description conference.description
 json.starts_at conference.starts_at.to_datetime.to_timestamp

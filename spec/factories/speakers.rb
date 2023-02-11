@@ -8,10 +8,10 @@ FactoryBot.define do
     job_title { 'CEO' }
 
     factory :speaker_test do
-        full_name { 'Test Speaker' }
-        email { 'test_speaker@email.com' }
-        company { 'Test Company' }
-        job_title { 'CTO' }
+      full_name { 'Test Speaker' }
+      email { 'test_speaker@email.com' }
+      company { 'Test Company' }
+      job_title { 'CTO' }
     end
   end
 end

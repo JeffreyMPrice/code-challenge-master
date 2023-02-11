@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Blacklisted
   CLIENT_IDS = %w[
     2tty
