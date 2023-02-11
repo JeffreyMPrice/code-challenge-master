@@ -46,7 +46,7 @@ RSpec.describe Reports::ConferencesController, type: :controller do
       )
     end
 
-    it 'returns only some of the records based on pagination' do
+    it 'returns only some of the records based on pagination limit' do
         conf = create(:event_with_attendees).conferences.first
         attendees = conf.attendees
 
@@ -67,5 +67,28 @@ RSpec.describe Reports::ConferencesController, type: :controller do
                               'title' => conf.title } }
         )
     end
-  end
+
+    it 'returns only some of the records based on pagination limit and offset' do
+        conf = create(:event_with_attendees).conferences.first
+        attendees = conf.attendees
+        expected_attendeed = conf.attendees.second
+
+        get :attendees, params: { conference_id: conf.id, limit: 1, offset: 1 }
+
+        results = JSON.parse(response.body)
+        expect(response).to have_http_status(:success)
+        expect(results['attendees'].size).to eq(1)
+        expect(results['conference']['attendees_count']).to eq(4)
+        expect(results).to eq(
+          { 'attendees' => [{ 'email' => expected_attendeed.email,
+                              'full_name' => expected_attendeed.full_name,
+                              'requires_certification' => expected_attendeed.requires_certification}],
+            'conference' => { 'attendees_count' => attendees.count,
+                              'description' => conf.description,
+                              'ends_at' => ends_at.to_s,
+                              'starts_at' => starts_at.to_s,
+                              'title' => conf.title } }
+        )
+    end
+end
 end
