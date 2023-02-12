@@ -23,5 +23,16 @@ FactoryBot.define do
     factory :event_with_attendees do
       conferences { [build(:conference_with_attendees)] }
     end
+
+    factory :event_with_conferences_and_attendees do
+      conferences { [build(:conference_with_attendees),
+                     build(:conference_with_attendees)] }
+    end
+
+    factory :event_with_conferences_and_duplicate_attendees do
+      conferences { [build(:conference_with_attendees),
+                     build(:conference_with_repeat_attendees),
+                     build(:conference_with_repeat_attendees)] }
+    end
   end
 end
