@@ -7,9 +7,6 @@ RSpec.describe Reports::EventsController, type: :controller do
   render_views
 
   describe 'GET speakers' do
-    let(:ends_at) { (DateTime.tomorrow + 4.days).strftime('%FT%T.0000+0000') }
-    let(:starts_at) { DateTime.tomorrow.strftime('%FT%T.0000+0000') }
-
     before(:all) do
       # on the very slight chance we are working near midmidnight and the days turns over
       # between creating the expected and the factory generation
@@ -23,7 +20,12 @@ RSpec.describe Reports::EventsController, type: :controller do
 
       expect(response).to have_http_status(:success)
       expect(JSON.parse(response.body)).to eq(
-        { 'event' => { 'description' => 'Test case for code challenge', 'ends_at' => ends_at.to_s, 'attendees_total' => 0, 'speakers_total' => 1, 'starts_at' => starts_at.to_s, 'title' => 'Test Event' },
+        { 'event' => { 'title' => event.title,
+                       'description' => event.description,
+                       'speakers_total' => event.unique_speakers_count,
+                       'attendees_total' => event.unique_attendees_count,
+                       'starts_at' => event.starts_at.strftime('%FT%T.0000+0000'),
+                       'ends_at' => event.ends_at.strftime('%FT%T.0000+0000') },
           'speakers' => [{ 'company' => 'Test Company', 'email' => 'demo_speaker@email.com', 'full_name' => 'Demo Speaker',
                            'job_title' => 'CEO' }] }
       )
@@ -36,10 +38,17 @@ RSpec.describe Reports::EventsController, type: :controller do
 
       expect(response).to have_http_status(:success)
       expect(JSON.parse(response.body)).to eq(
-        { 'event' => { 'description' => 'Test case for code challenge', 'ends_at' => ends_at.to_s, 'attendees_total' => 0, 'speakers_total' => 2, 'starts_at' => starts_at.to_s, 'title' => 'Test Event' },
+        {
+          'event' => { 'title' => event.title,
+                       'description' => event.description,
+                       'speakers_total' => event.unique_speakers_count,
+                       'attendees_total' => event.unique_attendees_count,
+                       'starts_at' => event.starts_at.strftime('%FT%T.0000+0000'),
+                       'ends_at' => event.ends_at.strftime('%FT%T.0000+0000') },
           'speakers' => [{ 'company' => 'Test Company', 'email' => 'demo_speaker@email.com', 'full_name' => 'Demo Speaker', 'job_title' => 'CEO' },
                          { 'company' => 'Test Company', 'email' => 'test_speaker@email.com', 'full_name' => 'Test Speaker',
-                           'job_title' => 'CTO' }] }
+                           'job_title' => 'CTO' }]
+        }
       )
     end
 
@@ -50,7 +59,12 @@ RSpec.describe Reports::EventsController, type: :controller do
 
       expect(response).to have_http_status(:success)
       expect(JSON.parse(response.body)).to eq(
-        { 'event' => { 'description' => 'Test case for code challenge', 'ends_at' => ends_at.to_s, 'attendees_total' => 0, 'speakers_total' => 1, 'starts_at' => starts_at.to_s, 'title' => 'Test Event' },
+        { 'event' => { 'title' => event.title,
+                       'description' => event.description,
+                       'speakers_total' => event.unique_speakers_count,
+                       'attendees_total' => event.unique_attendees_count,
+                       'starts_at' => event.starts_at.strftime('%FT%T.0000+0000'),
+                       'ends_at' => event.ends_at.strftime('%FT%T.0000+0000') },
           'speakers' => [{ 'company' => 'Test Company', 'email' => 'demo_speaker@email.com', 'full_name' => 'Demo Speaker',
                            'job_title' => 'CEO' }] }
       )
@@ -63,23 +77,25 @@ RSpec.describe Reports::EventsController, type: :controller do
 
       expect(response).to have_http_status(:success)
       expect(JSON.parse(response.body)).to eq(
-        { 'event' => { 'description' => 'Test case for code challenge',
-                       'ends_at' => ends_at.to_s,
-                       'speakers_total' => 2,
-                       'attendees_total' => 0,
-                       'starts_at' => starts_at.to_s,
-                       'title' => 'Test Event' },
-          'speakers' => [{ 'company' => 'Test Company', 'email' => 'demo_speaker@email.com', 'full_name' => 'Demo Speaker', 'job_title' => 'CEO' },
-                         { 'company' => 'Test Company', 'email' => 'test_speaker@email.com',
-                           'full_name' => 'Test Speaker', 'job_title' => 'CTO' }] }
+        { 'event' => { 'title' => event.title,
+                       'description' => event.description,
+                       'speakers_total' => event.unique_speakers_count,
+                       'attendees_total' => event.unique_attendees_count,
+                       'starts_at' => event.starts_at.strftime('%FT%T.0000+0000'),
+                       'ends_at' => event.ends_at.strftime('%FT%T.0000+0000') },
+          'speakers' => [{ 'company' => 'Test Company',
+                           'email' => 'demo_speaker@email.com',
+                           'full_name' => 'Demo Speaker',
+                           'job_title' => 'CEO' },
+                         { 'company' => 'Test Company',
+                           'email' => 'test_speaker@email.com',
+                           'full_name' => 'Test Speaker',
+                           'job_title' => 'CTO' }] }
       )
     end
   end
 
   describe 'GET attendees' do
-    let(:ends_at) { (DateTime.tomorrow + 4.days).strftime('%FT%T.0000+0000') }
-    let(:starts_at) { DateTime.tomorrow.strftime('%FT%T.0000+0000') }
-
     before(:all) do
       # on the very slight chance we are working near midmidnight and the days turns over
       # between creating the expected and the factory generation
@@ -102,12 +118,12 @@ RSpec.describe Reports::EventsController, type: :controller do
       expect(results.dig('event', 'attendees_total')).to eq 8
       expect(results).to eq(
         {
-          'event' => { 'description' => event.description,
-                       'ends_at' => ends_at.to_s,
+          'event' => { 'title' => event.title,
+                       'description' => event.description,
                        'speakers_total' => event.unique_speakers_count,
                        'attendees_total' => event.unique_attendees_count,
-                       'starts_at' => starts_at.to_s,
-                       'title' => event.title },
+                       'starts_at' => event.starts_at.strftime('%FT%T.0000+0000'),
+                       'ends_at' => event.ends_at.strftime('%FT%T.0000+0000') },
           'attendees' => expected_attendees
         }
       )
@@ -135,8 +151,8 @@ RSpec.describe Reports::EventsController, type: :controller do
           'event' => { 'description' => event.description,
                        'speakers_total' => event.unique_speakers_count,
                        'attendees_total' => event.unique_attendees_count,
-                       'starts_at' => event.starts_at.to_s,
-                       'ends_at' => event.ends_at.to_s,
+                       'starts_at' => event.starts_at.strftime('%FT%T.0000+0000'),
+                       'ends_at' => event.ends_at.strftime('%FT%T.0000+0000'),
                        'title' => event.title },
           'attendees' => expected_attendees
         }
@@ -145,9 +161,6 @@ RSpec.describe Reports::EventsController, type: :controller do
   end
 
   describe 'GET index' do
-    let(:ends_at) { (DateTime.tomorrow + 4.days).strftime('%FT%T.0000+0000') }
-    let(:starts_at) { DateTime.tomorrow.strftime('%FT%T.0000+0000') }
-
     before(:all) do
       # on the very slight chance we are working near midmidnight and the days turns over
       # between creating the expected and the factory generation
