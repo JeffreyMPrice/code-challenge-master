@@ -159,7 +159,18 @@ RSpec.describe Reports::EventsController, type: :controller do
 
       get :index, params: { event_id: event.id }
 
+      results = JSON.parse(response.body)
       expect(response).to have_http_status(:success)
+      expect(results).to eq(
+        {
+          'event' => { 'description' => event.description,
+                       'ends_at' => ends_at.to_s,
+                       'speakers_total' => event.unique_speakers_count,
+                       'attendees_total' => event.unique_attendees_count,
+                       'starts_at' => starts_at.to_s,
+                       'title' => event.title }
+          }
+        )
     end
 
     it 'shows complete information for an event with duplicates speakers and attendees removed' do
