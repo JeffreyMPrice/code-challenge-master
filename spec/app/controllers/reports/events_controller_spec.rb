@@ -133,10 +133,10 @@ RSpec.describe Reports::EventsController, type: :controller do
       expect(results).to eq(
         {
           'event' => { 'description' => event.description,
-                       'ends_at' => ends_at.to_s,
                        'speakers_total' => event.unique_speakers_count,
                        'attendees_total' => event.unique_attendees_count,
-                       'starts_at' => starts_at.to_s,
+                       'starts_at' => event.starts_at.to_s,
+                       'ends_at' => event.ends_at.to_s,
                        'title' => event.title },
           'attendees' => expected_attendees
         }
@@ -156,6 +156,25 @@ RSpec.describe Reports::EventsController, type: :controller do
 
     it 'shows complete information for event' do
       event = create(:event_with_conferences_and_attendees)
+      expected_conferences = event.conferences.map do |c|
+        expected_speakers = c.unique_speakers.map do |s|
+          {
+            'full_name' => s.full_name,
+            'email' => s.email,
+            'company' => s.company,
+            'job_title' => s.job_title
+          }
+        end
+        {
+          'title' => c.title,
+          'description' => c.description,
+          'ends_at' => c.ends_at.strftime('%FT%T.0000+0000'),
+          'starts_at' => c.starts_at.strftime('%FT%T.0000+0000'),
+          'attendees_count' => c.attendees.count,
+          'speakers_count' => expected_speakers.count,
+          'speakers' => expected_speakers
+        }
+      end
 
       get :index, params: { event_id: event.id }
 
@@ -164,21 +183,59 @@ RSpec.describe Reports::EventsController, type: :controller do
       expect(results).to eq(
         {
           'event' => { 'description' => event.description,
-                       'ends_at' => ends_at.to_s,
                        'speakers_total' => event.unique_speakers_count,
                        'attendees_total' => event.unique_attendees_count,
-                       'starts_at' => starts_at.to_s,
-                       'title' => event.title }
-          }
-        )
+                       'starts_at' => event.starts_at.strftime('%FT%T.0000+0000'),
+                       'ends_at' => event.ends_at.strftime('%FT%T.0000+0000'),
+                       'title' => event.title,
+                       'conferences' => expected_conferences }
+        }
+      )
     end
 
     it 'shows complete information for an event with duplicates speakers and attendees removed' do
-      event = create(:event_with_conferences_and_duplicate_attendees)
+      event = create(:event_with_conferences_and_duplicate_attendees_and_spakers)
+      expected_conferences = event.conferences.map do |c|
+        expected_speakers = c.unique_speakers.map do |s|
+          {
+            'full_name' => s.full_name,
+            'email' => s.email,
+            'company' => s.company,
+            'job_title' => s.job_title
+          }
+        end
+        {
+          'title' => c.title,
+          'description' => c.description,
+          'ends_at' => c.ends_at.strftime('%FT%T.0000+0000'),
+          'starts_at' => c.starts_at.strftime('%FT%T.0000+0000'),
+          'attendees_count' => c.attendees.count,
+          'speakers_count' => expected_speakers.count,
+          'speakers' => expected_speakers
+        }
+      end
+
+      expect(event.speakers).not_to eq(event.unique_attendees_count)
+      expect(event.attendees).not_to eq(event.unique_speakers_count)
 
       get :index, params: { event_id: event.id }
 
+      results = JSON.parse(response.body)
+
       expect(response).to have_http_status(:success)
+      expect(results.dig('event', 'attendees_total')).to eq(event.unique_attendees_count)
+      expect(results.dig('event', 'speakers_total')).to eq(event.unique_speakers_count)
+      expect(results).to eq(
+        {
+          'event' => { 'description' => event.description,
+                       'speakers_total' => event.unique_speakers_count,
+                       'attendees_total' => event.unique_attendees_count,
+                       'starts_at' => event.starts_at.strftime('%FT%T.0000+0000'),
+                       'ends_at' => event.ends_at.strftime('%FT%T.0000+0000'),
+                       'title' => event.title,
+                       'conferences' => expected_conferences }
+        }
+      )
     end
   end
 end

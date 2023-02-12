@@ -13,6 +13,14 @@ class Conference < ApplicationRecord
 
   after_validation :check_dates
 
+  def unique_speakers
+    @unique_speakers ||= speakers.group(:email).having('Max(updated_at)')
+  end
+
+  def unique_speakers_count
+    unique_speakers.length
+  end
+
   private
 
   def check_dates

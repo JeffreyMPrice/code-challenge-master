@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+# rubocop:disable Metrics/BlockLength
 FactoryBot.define do
   factory :event do
     title { 'Test Event' }
@@ -37,6 +38,15 @@ FactoryBot.define do
          build(:conference_with_repeat_attendees),
          build(:conference_with_repeat_attendees)]
       end
+
+      factory :event_with_conferences_and_duplicate_attendees_and_spakers do
+        conferences do
+          [build(:conference_with_attendees),
+           build(:conference_with_repeat_attendees_and_speakers),
+           build(:conference_with_repeat_attendees_and_speakers)]
+        end
+      end
     end
   end
 end
+# rubocop:enable Metrics/BlockLength
