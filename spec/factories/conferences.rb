@@ -24,5 +24,10 @@ FactoryBot.define do
     factory :conference_with_repeat_attendees do
       attendees { build_list :attendee_dupe, 1 }
     end
+
+    factory :conference_with_repeat_attendees_and_speakers do
+      attendees { build_list :attendee_dupe, 1 }
+      speakers { [build(:speaker_demo), build(:speaker_demo)] }
+    end
   end
 end
