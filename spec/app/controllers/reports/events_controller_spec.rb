@@ -143,5 +143,32 @@ RSpec.describe Reports::EventsController, type: :controller do
       )
     end
   end
+
+  describe 'GET index' do
+    let(:ends_at) { (DateTime.tomorrow + 4.days).strftime('%FT%T.0000+0000') }
+    let(:starts_at) { DateTime.tomorrow.strftime('%FT%T.0000+0000') }
+
+    before(:all) do
+      # on the very slight chance we are working near midmidnight and the days turns over
+      # between creating the expected and the factory generation
+      Timecop.freeze
+    end
+
+    it 'shows complete information for event' do
+      event = create(:event_with_conferences_and_attendees)
+
+      get :index, params: { event_id: event.id }
+
+      expect(response).to have_http_status(:success)
+    end
+
+    it 'shows complete information for an event with duplicates speakers and attendees removed' do
+      event = create(:event_with_conferences_and_duplicate_attendees)
+
+      get :index, params: { event_id: event.id }
+
+      expect(response).to have_http_status(:success)
+    end
+  end
 end
 # rubocop:enable Metrics/BlockLength

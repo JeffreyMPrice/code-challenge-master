@@ -2,6 +2,10 @@
 
 module Reports
   class EventsController < ::ApplicationController
+    def index
+      @event = Event.find events_params[:event_id]
+    end
+
     def speakers
       @event = Event.find events_params[:event_id]
     end
