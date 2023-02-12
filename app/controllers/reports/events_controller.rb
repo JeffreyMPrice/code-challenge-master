@@ -6,6 +6,10 @@ module Reports
       @event = Event.find events_params[:event_id]
     end
 
+    def attendees
+      @event = Event.find events_params[:event_id]
+    end
+
     private
 
     def events_params

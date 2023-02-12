@@ -16,4 +16,17 @@ class Event < ApplicationRecord
     # moved this into a helper function because size and count return group information
     unique_speakers.length
   end
+
+  def attendees
+    @attendees ||= Attendee.joins(:conference).where(conferences: {event_id: id})
+  end
+
+  def unique_attendees
+    @unique_attendees ||= Attendee.joins(:conference).where(conferences: {event_id: id}).group(:email)
+  end
+
+  def unique_attendees_count
+    unique_attendees.length
+  end
+
 end

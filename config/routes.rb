@@ -4,6 +4,7 @@ Rails.application.routes.draw do
   namespace :reports do
     match 'conferences/:conference_id/attendees' => 'conferences#attendees', via: :get
     match 'events/:event_id/speakers' => 'events#speakers', via: :get
+    match 'events/:event_id/attendees' => 'events#attendees', via: :get
   end
 
   # handle common error conditions in an appropriate, API friendly way
