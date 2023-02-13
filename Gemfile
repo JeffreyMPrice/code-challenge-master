@@ -22,6 +22,9 @@ gem 'jbuilder'
 # Security
 gem 'bcrypt'
 
+# Network
+gem 'faraday'
+
 # Others
 gem 'awesome_print'
 gem 'date_validator' # makes it easier to validate times/dates
