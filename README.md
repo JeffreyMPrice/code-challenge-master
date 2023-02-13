@@ -47,7 +47,7 @@ I need a report that lists all of the conferences for any given event. I need to
 ### Ticket 5
 
 ```
-Users are creating duplicate attendee data that is causing data to not be clean. We would like to see a sanitized list of all uniqe attendees for an event.
+Users are creating duplicate attendee data that is causing data to not be clean. We would like to see a sanitized list of all unique attendees for an event.
 ```
 
 ### Ticket 6
