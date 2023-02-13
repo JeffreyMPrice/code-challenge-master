@@ -8,6 +8,8 @@ Rails.application.routes.draw do
     match 'events/:event_id/attendees' => 'events#attendees', via: :get
   end
 
+  match '/publicapis' => 'publicapis#index', via: :get
+
   # handle common error conditions in an appropriate, API friendly way
   match '/errors/internal' => 'errors#internal', via: :all
   match '/errors/route' => 'errors#not_implemented', via: :all
